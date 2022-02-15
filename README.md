@@ -12,7 +12,7 @@ rvm use 3.1
 chruby ruby-3.1
 ```
 
-Run code:
+Run tests:
 ```
-ruby pig_latin_engine.rb
+rspec spec/pig_latin_engine_spec.rb --format doc
 ```
