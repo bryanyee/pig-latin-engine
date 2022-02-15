@@ -4,18 +4,25 @@ VOWELS = %w(a e i o u y)
 VOWELS_SET = Set.new(VOWELS)
 
 def translate(string)
-  words = string.split()
+  words = string.split
   translated_words = words.map { |word| convert_word(word) }
   translated_words.join(' ')
 end
 
-# TODO: handle special characters
 def convert_word(word)
   char_array = word.split('')
   result_array = []
-  first_vowel_position = char_array.index { |char| is_vowel(char) }
+  first_vowel_position = char_array.index { |char| is_vowel?(char) }
 
-  # Step 1 - Reorganize characters
+  # Step 1 - Strip off special characters at the end, to add back later
+  special_char_suffix_array = []
+  while !is_letter?(char_array[char_array.size-1])
+    non_letter_char = char_array.pop
+    special_char_suffix_array.push(non_letter_char)
+  end
+  special_char_suffix_array.reverse!
+
+  # Step 2 - Reorganize characters
   # Case 1: First characters are `qu`
   if word[0] === 'q' && word[1] === 'u'
     result_array = char_array.slice(2, char_array.size - 2).concat(['q', 'u'])
@@ -29,33 +36,41 @@ def convert_word(word)
     result_array = char_array.dup().concat(['w'])
   end
 
-  # Step 2 - Pass through each character and set the appropriate casing
+  # Step 3 - Pass through each character and set the appropriate casing
   char_array.each_index do |index|
     char = char_array[index]
-    result_array[index] = if is_upcase(char)
-      result_array[index].upcase()
+    result_array[index] = if is_upcase?(char)
+      result_array[index].upcase
     else
-      result_array[index].downcase()
+      result_array[index].downcase
     end
   end
 
-  # Step 3 - Append `ay`
+  # Step 4 - Append `ay`
   last_char = word[word.size-1]
-  if is_upcase(last_char)
+  if is_upcase?(last_char)
     result_array.concat(['A', 'Y'])
   else
     result_array.concat(['a', 'y'])
   end
 
-  result_array.join()
+  # Step 5 - Add back special characters at the end of the word, if any
+  result_array = result_array.concat(special_char_suffix_array)
+
+  # Return
+  result_array.join
 end
 
-def is_vowel(char)
-  VOWELS_SET.include?(char) || VOWELS_SET.include?(char.downcase())
+def is_vowel?(char)
+  VOWELS_SET.include?(char) || VOWELS_SET.include?(char.downcase)
 end
 
-def is_upcase(char)
-  char == char.upcase()
+def is_upcase?(char)
+  is_letter?(char) && char == char.upcase
+end
+
+def is_letter?(char)
+  !char.match(/[a-zA-Z]/).nil?
 end
 
 tests = [
@@ -65,10 +80,10 @@ tests = [
   ['eat world', 'eatway orldway'], # PASS
   ['Hello', 'Ellohay'], # PASS
   ['Apples', 'Applesway'], # PASS
-  ['eat… world?!', 'eatway… orldway?!'],
+  ['eat… world?!', 'eatway… orldway?!'], # PASS
   ['school', 'oolschay'], # PASS
   ['quick', 'ickquay'], # PASS
-  ['she’s great!', 'e’sshay eatgray!'],
+  ['she’s great!', 'e’sshay eatgray!'], # PASS
   ['HELLO', 'ELLOHAY'], # PASS
   ['Hello There', 'Ellohay Erethay'] # PASS
 ]

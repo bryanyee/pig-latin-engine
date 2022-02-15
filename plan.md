@@ -1,23 +1,27 @@
 ## Logic
 ```
-# TODO: handle special characters at the end of a word
-
 Outer func:
   Split words by whitespace
   Process each word
   Join the results and return
 
 Translate word func:
+  If word ends with special chars, strip them off (to add back later)
+
   If word starts w/ `qu`
-    Move `qu` to the end and append `ay`
+    Move `qu` to the end
   If word starts w/ consonant
-    Move first group of consonants to end and append `ay`
+    Move first group of consonants to end
   Else (starts w/ vowel)
-    Append `way` at the end
+    Append `w` at the end
   
   Pass through each character
     Set casing of each character to match the corresponding position of the original string
     Match the casing of the appended characters in the result to the last character of the original string
+
+  Append `ay` at the end w/ the correct casing
+
+  If original word ended with special chars, add them back
 
   Return the result
 ```
