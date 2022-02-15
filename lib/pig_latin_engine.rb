@@ -33,7 +33,7 @@ class PigLatinEngine
     elsif first_vowel_position > 0
       consonant_group = char_array.slice(0, first_vowel_position)
       remaining_word = char_array.slice(first_vowel_position, char_array.size - first_vowel_position)
-      result_array = remaining_word.concat(consonant_group)
+      result_array = remaining_word.dup().concat(consonant_group)
     # Case 3: First character is a vowel
     else
       result_array = char_array.dup().concat(['w'])
@@ -58,7 +58,7 @@ class PigLatinEngine
     end
   
     # Step 5 - Add back special characters at the end of the word, if any
-    result_array = result_array.concat(special_char_suffix_array)
+    result_array.concat(special_char_suffix_array)
   
     # Return
     result_array.join
