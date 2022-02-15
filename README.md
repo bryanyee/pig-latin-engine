@@ -1,3 +1,4 @@
 # pig-latin-engine
 
-[Instructions](instructions.md)
+- [Instructions](instructions.md)
+- [Plan](plan.md)
