@@ -12,6 +12,11 @@ rvm use 3.1
 chruby ruby-3.1
 ```
 
+Install gems:
+```
+bundle install
+```
+
 Run tests:
 ```
 rspec spec/pig_latin_engine_spec.rb --format doc
